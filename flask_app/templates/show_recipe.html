@@ -1,0 +1,27 @@
+{%extends 'index.html'%}{% block content %}
+<div class="d-flex justify-content-between w-75 mx-auto mt-3">
+  <h1>Wellcome {{one_user.first_name}}</h1>
+  <div class="d-flex align-items-center">
+    <a class="btn btn-warning mr-3" href="/user_dashboard">Dashboard</a>
+    <a class="btn btn-secondary" href="/logout">Logout</a>
+  </div>
+</div>
+<div class="card bg-dark w-50 mx-auto mt-5" style="width: 18rem">
+  <div class="card-body">
+    <h1 class="card-title text-primary">{{one_recipe.name}}</h1>
+    <p class="card-text text-white">
+      Description: <span>{{one_recipe.description}}</span>
+    </p>
+    <p class="card-text text-white">
+      Under 30 Minutes: <span>{{one_recipe.time_cook}}</span>
+    </p>
+    <p class="card-text text-white">
+      Instructions: <span>{{one_recipe.instructions}}</span>
+    </p>
+
+    <p class="card-text text-white">
+      Date Made On: <span>{{one_recipe.date_made}}</span>
+    </p>
+  </div>
+</div>
+{% endblock %}

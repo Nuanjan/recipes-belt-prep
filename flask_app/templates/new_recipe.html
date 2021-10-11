@@ -1,0 +1,66 @@
+ {%extends 'index.html'%}{% block content %}
+ <div class="d-flex justify-content-between w-75 mx-auto mt-3">
+  <h1>Wellcome....</h1>
+  <div class="d-flex align-items-center">
+    <a class="btn btn-warning mr-3" href="/recipe/new">Create</a>
+    <a class="btn btn-secondary" href="/logout">Logout</a>
+  </div>
+</div>
+<div class="w-75 bg-dark mx-auto p-5">
+ {% with messages = get_flashed_messages()
+          %}{% if messages %}
+          <div class="alert alert-danger">
+            {% for message in messages %}
+            <p>{{message}}</p>
+            {% endfor %}
+          </div>
+          {% endif %} {% endwith %}
+</div>
+{% block recipe %}
+ <form action={{ url_for('add_recipe') }} method="post" class="row bg-dark w-75 mx-auto p-3 align-items-center justify-content-around ">
+       
+        <div class="col-5">
+            <div class="form-group">
+              <label class="text-white" for="name">Name:</label>
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                id="name"
+                aria-describedby="nameHelp"
+                placeholder="Enter name"
+              />
+            </div>
+            
+            <div class="form-group mt-3">
+              <label class="text-white" for="description">Descriptions:</label>
+              <textarea
+                name="description"
+                class="form-control"
+                id="description"
+                rows="8"
+              ></textarea>
+            </div>
+            <div class="form-group mt-3">
+              <label class="text-white" for="instructions">Instructions:</label>
+              <textarea
+                name="instructions"
+                class="form-control"
+                id="instructions"
+                rows="8"
+              ></textarea>
+            </div>
+        </div>
+        <div class="col-5 text-white d-flex flex-column justify-content-center mt-3 align-items-center">
+            <label class="h5" for="date_made">Date Made On:</label>
+            <input type="date" name="date_made" id="date_made">
+             <h4 class="mt-5">Under 30 Minutes?</h4>
+            <div class="d-flex flex-column justify-content-center">
+                <div class="p-3 border border-light"><input class="display-5 mb-3" type="radio" name="time_cook" id="Yes" value="Yes"><span class="m-5 display-4">Yes</span></div>
+                <div class="p-3 border border-light"><input class="display-5" type="radio" name="time_cook" id="No" value="No"><span class="m-5 display-4">No</span></div>
+            </div>
+            <button type="submit" class="btn btn-warning mt-5 w-50 ">Create</button>
+        </div>
+      </form>
+      {% endblock %}
+      {% endblock %}
