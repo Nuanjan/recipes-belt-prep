@@ -29,9 +29,10 @@ def register_user():
             "email": request.form['e_mail'],
             "password": hashed_password
         }
-        if not User.add_user(data):
+        addUser = User.add_user(data)
+        if not addUser:
             return redirect('/')
-        session['user_id'] = User.add_user(data)
+        session['user_id'] = addUser
         return redirect('/user_dashboard')
     elif request.form['which_form'] == "login":
         data = {"email": request.form['e_mail']}
@@ -55,13 +56,21 @@ def register_user():
 
 @app.route('/user_dashboard')
 def user_dashboard():
+    show_table = ""
     if 'user_id' in session:
+        show = ""
+        if 'table' in session:
+            show = session["table"]
         data = {
             "id": session['user_id']
         }
         one_user = User.get_user_by_id(data)
         user_recipes = User.get_user_with_recipes(data)
-        return render_template('user_dashboard.html', user_recipes=user_recipes, one_user=one_user)
+        if user_recipes.recipes[0].name:
+            show_table = "true"
+        print(user_recipes.recipes, " name")
+        print(show_table, " show_table")
+        return render_template('user_dashboard.html', user_recipes=user_recipes, one_user=one_user, show_table=show_table)
     else:
         return redirect('/forbidden')
 

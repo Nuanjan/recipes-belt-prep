@@ -45,7 +45,8 @@ class Recipe:
 
     @classmethod
     def add_recipe(cls, data):
-        query = "INSERT INTO recipes (name, description, instructions, date_made,time_cook, time_cook=%(time_cook)s,created_at, updated_at, user_id) VALUES(%(name)s, %(description)s, %(instructions)s, %(date_made)s,%(time_cook)s, NOW(), NOW(),%(user_id)s)"
+        print(data, " dta before add")
+        query = "INSERT INTO recipes (name, description, instructions, date_made,time_cook,created_at, updated_at, user_id) VALUES(%(name)s, %(description)s, %(instructions)s, %(date_made)s,%(time_cook)s, NOW(), NOW(),%(user_id)s)"
         result = connectToMySQL('recipes_schema').query_db(query, data)
         return result
 
@@ -60,5 +61,10 @@ class Recipe:
     @classmethod
     def edit_recipe(cls, data):
         print(data, " data before update")
-        query = "UPDATE recipes SET name = %(name)s, description = %(description)s, instructions = %(instructions)s, date_made=%(date_made)s, updated_at=NOW() WHERE recipe.id = %(id)s"
+        query = "UPDATE recipes SET name = %(name)s, description = %(description)s, instructions = %(instructions)s, date_made=%(date_made)s, time_cook= %(time_cook)s, updated_at=NOW() WHERE recipes.id = %(id)s"
+        return connectToMySQL('recipes_schema').query_db(query, data)
+
+    @classmethod
+    def delete_recipe(cls, data):
+        query = "DELETE FROM recipes WHERE recipes.id = %(id)s;"
         return connectToMySQL('recipes_schema').query_db(query, data)
