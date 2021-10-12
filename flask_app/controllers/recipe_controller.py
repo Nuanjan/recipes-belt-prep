@@ -46,6 +46,7 @@ def get_recipe(recipe_id):
 
 @app.route('/edit/<int:recipe_id>')
 def edit_recipe(recipe_id):
+    print(" this is recipe_id from url:", recipe_id)
     data = {
         "id": recipe_id
     }
@@ -55,12 +56,12 @@ def edit_recipe(recipe_id):
 
 @app.route('/edit_exist_recipe/<int:recipe_id>', methods=['POST'])
 def edit_exist_recipe(recipe_id):
-    print(recipe_id, " this is edit with recipe id")
+    print("request for: ", request.form)
     if not 'user_id' in session:
         return render_template('forbidden.html')
     else:
         if not Recipe.validate_recipe(request.form):
-            return redirect(f'/edit/{request.form["recipe_id"]}')
+            return redirect(f'/edit/{recipe_id}')
     data = {
         "id": recipe_id,
         'name': request.form['name'],

@@ -35,19 +35,19 @@ class User:
             flash("Password must be at least 8 characters.")
             is_valid = False
         if not PW_REGEX.match(userFormData['password']):
-            flash("email must be at least one digit")
-            flash("email must be at least one uppercase letter")
-            flash("email must be at least one lowercase letter")
+            flash("email must contain at least one digit")
+            flash("email must contain at least one uppercase letter")
+            flash("email must contain at least one lowercase letter")
             is_valid = False
         if userFormData['password'] != userFormData['confirm_password']:
-            flash("password and confirm password does not match")
+            flash("Password and confirm password does not match")
             is_valid = False
         if not EMAIL_REGEX.match(userFormData['e_mail']):
             flash("Invalid email")
             is_valid = False
         data = {"email": userFormData['e_mail']}
         if User.get_user_by_email(data):
-            flash("Thia Email already taken!")
+            flash("This Email already taken!")
             is_valid = False
         return is_valid
 
