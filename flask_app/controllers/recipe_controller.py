@@ -34,16 +34,14 @@ def add_recipe():
 
 @app.route('/recipe/<int:recipe_id>')
 def get_recipe(recipe_id):
-    if 'user_id' in session:
+    if not 'user_id' in session:
+        return render_template('forbidden.html')
+    else:
         data = {
             "id": recipe_id
         }
-        user_data = {
-            "id": session['user_id']
-        }
-        one_user = User.get_user_by_id(user_data)
-        one_recipe = Recipe.get_recipe_by_id(data)
-    return render_template('show_recipe.html', one_recipe=one_recipe, one_user=one_user)
+        one_recipe = Recipe.get_recipe_with_owner(data)
+    return render_template('show_recipe.html', one_recipe=one_recipe)
 
 
 @app.route('/edit/<int:recipe_id>')
@@ -55,15 +53,16 @@ def edit_recipe(recipe_id):
     return render_template('edit_recipe.html', one_recipe=one_recipe)
 
 
-@app.route('/edit_exist_recipe', methods=['POST'])
-def edit_exist_recipe():
+@app.route('/edit_exist_recipe/<int:recipe_id>', methods=['POST'])
+def edit_exist_recipe(recipe_id):
+    print(recipe_id, " this is edit with recipe id")
     if not 'user_id' in session:
         return render_template('forbidden.html')
     else:
         if not Recipe.validate_recipe(request.form):
             return redirect(f'/edit/{request.form["recipe_id"]}')
     data = {
-        "id": request.form['recipe_id'],
+        "id": recipe_id,
         'name': request.form['name'],
         'description': request.form['description'],
         'instructions': request.form['instructions'],

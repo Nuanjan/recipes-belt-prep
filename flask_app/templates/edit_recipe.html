@@ -1,6 +1,5 @@
 {%extends 'new_recipe.html'%} {%block recipe%}
-<form action={{ url_for('edit_exist_recipe') }} method="post" class="row bg-dark w-75 mx-auto p-3 align-items-center justify-content-around ">
-        <input type="hidden" name ="recipe_id" value="{{one_recipe.id}}" />
+<form action={{ url_for('edit_exist_recipe',recipe_id=one_recipe.id) }} method="post" class="row bg-dark w-75 mx-auto p-3 align-items-center justify-content-around ">
         <div class="col-5">
             <div class="form-group">
               <label class="text-white" for="name">Name:</label>

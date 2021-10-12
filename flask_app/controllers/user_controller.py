@@ -2,6 +2,8 @@ from flask.helpers import flash
 from flask_app import app
 from flask import redirect, render_template, session, request, url_for
 from flask_app.models.user import User
+from flask_app.models.recipe import Recipe
+
 
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)     # we are creating an object called bcrypt,
@@ -58,19 +60,15 @@ def register_user():
 def user_dashboard():
     show_table = ""
     if 'user_id' in session:
-        show = ""
-        if 'table' in session:
-            show = session["table"]
         data = {
             "id": session['user_id']
         }
         one_user = User.get_user_by_id(data)
-        user_recipes = User.get_user_with_recipes(data)
-        if user_recipes.recipes[0].name:
+        all_recipes = Recipe.all_recipes_with_users()
+        print(len(all_recipes), " this is all recipes")
+        if all_recipes:
             show_table = "true"
-        print(user_recipes.recipes, " name")
-        print(show_table, " show_table")
-        return render_template('user_dashboard.html', user_recipes=user_recipes, one_user=one_user, show_table=show_table)
+        return render_template('user_dashboard.html', all_recipes=all_recipes, one_user=one_user, show_table=show_table)
     else:
         return redirect('/forbidden')
 

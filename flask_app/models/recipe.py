@@ -1,6 +1,8 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
 
+from flask_app.models import user
+
 
 class Recipe:
     def __init__(self, data):
@@ -13,6 +15,8 @@ class Recipe:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.user_id = data['user_id']
+
+        self.owner = {}
 
     @staticmethod
     def validate_recipe(recipeForm):
@@ -68,3 +72,51 @@ class Recipe:
     def delete_recipe(cls, data):
         query = "DELETE FROM recipes WHERE recipes.id = %(id)s;"
         return connectToMySQL('recipes_schema').query_db(query, data)
+
+    @classmethod
+    def all_recipes_with_users(cls):
+        query = "SELECT * FROM recipes LEFT JOIN users ON recipes.user_id = users.id;"
+        results = connectToMySQL('recipes_schema').query_db(query)
+
+        # parse the data
+
+        all_recipes = []
+
+        for row in results:
+            one_recipe = cls(row)
+
+            user_data = {
+                "id": row['users.id'],
+                "first_name": row['first_name'],
+                "last_name": row['last_name'],
+                "email": row['email'],
+                "password": row['password'],
+                "created_at": row['users.created_at'],
+                "updated_at": row['users.updated_at']
+
+            }
+            one_recipe.owner = user.User(user_data)
+            all_recipes.append(one_recipe)
+        return all_recipes
+
+    @classmethod
+    def get_recipe_with_owner(cls, data):
+        query = "SELECT * FROM recipes LEFT JOIN users ON recipes.user_id = users.id WHERE recipes.id = %(id)s"
+        results = connectToMySQL('recipes_schema').query_db(query, data)
+
+        one_recipe = cls(results[0])
+
+        user_data = {
+            "id": results[0]['users.id'],
+            "first_name": results[0]['first_name'],
+            "last_name": results[0]['last_name'],
+            "email": results[0]['email'],
+            "password": results[0]['password'],
+            "created_at": results[0]['users.created_at'],
+            "updated_at": results[0]['users.updated_at']
+
+        }
+
+        one_recipe.owner = user.User(user_data)
+        print(one_recipe, " one recipe from database")
+        return one_recipe

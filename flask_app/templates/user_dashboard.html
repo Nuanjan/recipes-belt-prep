@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {%extends 'index.html'%}{% block content %}
 <div class="d-flex justify-content-between w-75 mx-auto mt-3">
-  <h1>Wellcome {{user_recipes.first_name}}</h1>
+  <h1>Wellcome {{one_user.first_name}}</h1>
   <div class="d-flex align-items-center">
     <a class="btn btn-warning mr-3" href="/recipe/new">Create</a>
     <a class="btn btn-secondary" href="/logout">Logout</a>
@@ -16,24 +16,26 @@
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Under 30 minutes?</th>
+        <th scope="col">Owner</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
-    {% if show != "false" %}
     <tbody>
-      {% for recipe in user_recipes.recipes %}
+      {% for recipe in all_recipes %}
       <tr>
         <td>{{recipe.name}}</td>
         <td>{{recipe.time_cook}}</td>
+        <td>{{recipe.owner.first_name}} {{recipe.owner.last_name}}</td>
+        {% if recipe.owner.id == one_user.id%}
         <td>
           <a class="text-light" href="/recipe/{{recipe.id}}">Show | </a>
           <a class="text-light" href="/edit/{{recipe.id}}">Edit | </a>
           <a class="text-light" href="/delete/{{recipe.id}}">Delete</a>
         </td>
+        {% endif %}
       </tr>
       {% endfor %}
     </tbody>
-    {% endif %}
   </table>
   {%endif%}
 </div>
