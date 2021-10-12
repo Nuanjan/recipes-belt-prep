@@ -26,11 +26,11 @@
         <td>{{recipe.name}}</td>
         <td>{{recipe.time_cook}}</td>
         <td>{{recipe.owner.first_name}} {{recipe.owner.last_name}}</td>
-        {% if recipe.owner.id == one_user.id%}
         <td>
-          <a class="text-light" href="/recipe/{{recipe.id}}">Show | </a>
-          <a class="text-light" href="/edit/{{recipe.id}}">Edit | </a>
-          <a class="text-light" href="/delete/{{recipe.id}}">Delete</a>
+          <a class="text-light" href="/recipe/{{recipe.id}}">Show </a>
+          {% if recipe.owner.id == one_user.id%}
+          <a class="text-light" href="/edit/{{recipe.id}}"> | Edit</a>
+          <a class="text-light" href="/delete/{{recipe.id}}"> | Delete</a>
         </td>
         {% endif %}
       </tr>
